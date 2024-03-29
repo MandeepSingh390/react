@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do</title>
+    <style>
+      h1 {
+        margin: auto auto auto 50%;
+      }
+      .main {
+        /* margin: 10% auto auto auto;
+        display: auto; */
+      }
+      ul {
+        list-style: none;
+        display: inline-block;
+      }
+      li * {
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>To-Do</h1>
+    <div class="main">
+      <div class="newTask">
+        <input type="text" name="task" id="newTask" />
+        <input
+          type="button"
+          id="myBtn"
+          value="addNewTask"
+          onclick="addNewTask()"
+        />
+      </div>
+      <div>
+        <ul id="mainList">
+            <li>
+                <input type="checkbox" name="checkbox" onchange="change(event)"></input>
+                <p>Complete the below Task and then delete them</p>
+                <button class="close" onclick="deleteTask(event)">X</button>
+            </li>
+            <li>
+                <input type="checkbox" name="checkbox" onchange="change(event)"></input>
+                <p>Check the first Task and then delete all the completed Tasks</p>
+                <button class="close" onclick="deleteTask(event)">X</button>
+            </li>
+        </ul>
+      </div>
+    </div>
+    <script>
+      const newTask = document.getElementById("newTask");
+      const mainList = document.getElementById("mainList");
+      //   let checkboxes = document.querySelectorAll("input[type=checkbox]");
+
+      newTask.addEventListener("keypress", function (event) {
+        // If the user presses the "Enter" key on the keyboard
+        if (event.key === "Enter") {
+          // Cancel the default action, if needed
+          event.preventDefault();
+          // Trigger the button element with a click
+          document.getElementById("myBtn").click();
+        }
+      });
+
+      function addNewTask() {
+        if (newTask.value == "") {
+          return alert("Please Enter New Task");
+        }
+        const node = document.createElement("li");
+        const input = document.createElement("input");
+        input.setAttribute("type", "checkbox");
+        input.addEventListener("change", () => change(event));
+        const p = document.createElement("p");
+        const textnode = document.createTextNode(newTask.value);
+        p.append(textnode);
+        const button = document.createElement("button");
+        const buttonTextNode = document.createTextNode("X");
+        // button.className("close")
+        button.setAttribute("class", "close");
+        button.addEventListener("click", () => deleteTask(event));
+        button.append(buttonTextNode);
+
+        node.appendChild(input);
+        node.appendChild(p);
+        node.appendChild(button);
+        // document.getElementById("myList").appendChild(node);
+        mainList.appendChild(node);
+        newTask.value = "";
+        // checkboxes = document.querySelectorAll("input[type=checkbox]");
+      }
+
+      let enabledSettings = [];
+
+      function change(el) {
+        const nextEl = el.target.nextElementSibling;
+        // nextEl.css("text-decoration: line-through");
+        if (nextEl.style.textDecoration !== "line-through") {
+          nextEl.style.textDecoration = "line-through";
+        } else {
+          nextEl.style.textDecoration = "none";
+        }
+        // // console.log(this.siblings('label').css('text-decoration', 'line-through'));
+        // // alert("changed");
+        // enabledSettings = Array.from(checkboxes) // Convert checkboxes to an array to use filter and map.
+        //   .filter((i) => i.checked) // Use Array.filter to remove unchecked checkboxes.
+        //   .map((i) => i.value); // Use Array.map to extract only the checkbox values from the array of objects.
+
+        // console.log(enabledSettings);
+      }
+
+      function deleteTask(event) {
+        const deleteConfirmation = confirm(
+          "Are you sure you want to delete this task, press ok to confirm"
+        );
+        if (!!!deleteConfirmation) return;
+        event.target.parentElement.remove();
+      }
+    </script>
+  </body>
+</html>
